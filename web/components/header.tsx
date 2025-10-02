@@ -1,24 +1,38 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Wallet } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Wallet } from "lucide-react";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { shortenAddress } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
+import { toast } from "sonner";
+
+const aptosConfig = new AptosConfig({ network: Network.TESTNET });
+const aptos = new Aptos(aptosConfig);
 
 export function Header() {
-  const [isConnected, setIsConnected] = useState(false)
-  const [walletAddress, setWalletAddress] = useState("")
+  const { connect, disconnect, account, connected } = useWallet();
+  const [balance, setBalance] = useState<number | null>(null);
 
-  const handleConnect = () => {
-    // Mock wallet connection
-    const mockAddress = "0x" + Math.random().toString(16).substring(2, 10)
-    setWalletAddress(mockAddress)
-    setIsConnected(true)
-  }
+  useEffect(() => {
+    if (connected && account) {
+      aptos
+        .getAccountAPTAmount({ accountAddress: account.address })
+        .then((amount) => setBalance(amount / 10 ** 8));
+    }
+  }, [connected, account]);
 
-  const handleDisconnect = () => {
-    setWalletAddress("")
-    setIsConnected(false)
-  }
+  const handleConnect = (walletName: string) => {
+    connect(walletName);
+  };
+
+  const handleCopyAddress = () => {
+    if (account?.address) {
+      navigator.clipboard.writeText(account.address.toString());
+      toast.success("Address copied to clipboard");
+    }
+  };
 
   return (
     <header className="border-b border-border bg-card">
@@ -30,22 +44,31 @@ export function Header() {
           <span className="text-xl font-bold">Veil Mixer</span>
         </div>
 
-        {isConnected ? (
+        {connected && account ? (
           <div className="flex items-center gap-3">
-            <div className="px-3 py-2 bg-secondary rounded-lg border border-border">
-              <span className="text-sm font-mono">{walletAddress}</span>
+            <div
+              className="px-3 py-2 bg-secondary rounded-lg border border-border cursor-pointer"
+              onClick={handleCopyAddress}
+            >
+              <span className="text-sm font-mono">
+                {balance?.toFixed(4)} APT |{" "}
+                {shortenAddress(account.address.toString())}
+              </span>
             </div>
-            <Button variant="outline" size="sm" onClick={handleDisconnect}>
+            <Button variant="outline" size="sm" onClick={disconnect}>
               Disconnect
             </Button>
           </div>
         ) : (
-          <Button onClick={handleConnect} className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button
+            onClick={() => handleConnect("OKX Wallet")}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
             <Wallet className="w-4 h-4 mr-2" />
             Connect Wallet
           </Button>
         )}
       </div>
     </header>
-  )
+  );
 }
