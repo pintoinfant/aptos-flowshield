@@ -61,7 +61,7 @@ export function Header() {
           </div>
         ) : (
           <Button
-            onClick={() => handleConnect("OKX Wallet")}
+            onClick={() => handleConnect("Petra")}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
             <Wallet className="w-4 h-4 mr-2" />

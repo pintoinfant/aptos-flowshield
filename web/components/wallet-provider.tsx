@@ -4,7 +4,10 @@ import {
   DappConfig,
 } from "@aptos-labs/wallet-adapter-react";
 import { Network } from "@aptos-labs/ts-sdk";
+import { PetraWallet } from "petra-plugin-wallet-adapter";
 import { ReactNode } from "react";
+
+const wallets = [new PetraWallet()];
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const dappConfig: DappConfig = {
@@ -13,6 +16,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AptosWalletAdapterProvider
+      plugins={wallets}
       dappConfig={dappConfig}
       autoConnect={true}
       onError={(error) => {

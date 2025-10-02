@@ -9,4 +9,4 @@ AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir 
 [addresses]
 # This line creates a named address 'veil_addr'. We will set its
 # value in the next step.
-veil_addr = "0x6e8cda31dca1ca7dc92b86c5d308e691980316da808cc9d698abf89d8ff0b084"
+veil_addr = "0x3eadac8d7170d34694f97efc1fad8c62f4b2ea8f23f5ddd1a4e2bc8c9bfc3d50"

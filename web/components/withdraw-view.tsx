@@ -1,64 +1,78 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
-import { AlertCircle } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { AlertCircle } from "lucide-react";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { toast as sonnerToast } from "sonner";
+import { sha256 } from "js-sha256";
+import { Buffer } from "buffer";
+
+const MODULE_ADDRESS = "0x3eadac8d7170d34694f97efc1fad8c62f4b2ea8f23f5ddd1a4e2bc8c9bfc3d50";
 
 export function WithdrawView() {
-  const [secretNote, setSecretNote] = useState("")
-  const [recipientAddress, setRecipientAddress] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  const [secretNote, setSecretNote] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { signAndSubmitTransaction, account } = useWallet();
 
   const handleWithdraw = async () => {
+    if (!account) {
+      sonnerToast.error("Please connect your wallet first.");
+      return;
+    }
+
     if (!secretNote.trim()) {
-      toast({
-        title: "Secret Note Required",
-        description: "Please enter your secret note",
-        variant: "destructive",
-      })
-      return
+      sonnerToast.error("Please enter your secret note.");
+      return;
     }
 
-    if (!recipientAddress.trim()) {
-      toast({
-        title: "Recipient Address Required",
-        description: "Please enter a recipient address",
-        variant: "destructive",
-      })
-      return
+    if (!recipientAddress.trim() || !recipientAddress.startsWith("0x")) {
+      sonnerToast.error("Please enter a valid recipient address.");
+      return;
     }
 
-    if (!recipientAddress.startsWith("0x")) {
-      toast({
-        title: "Invalid Address",
-        description: "Address must start with 0x",
-        variant: "destructive",
-      })
-      return
+    // const noteParts = secretNote.split("-");
+    // if (noteParts.length !== 3 || noteParts[0] !== "veil" || noteParts[1] !== "10") {
+    //   sonnerToast.error("Invalid secret note format.");
+    //   return;
+    // }
+
+    setIsLoading(true);
+
+    try {
+      // 1. Extract secret and calculate hash
+      const secret = Buffer.from(secretNote, "hex");
+      const hash = sha256.create();
+      hash.update(secret);
+      const secretHash = hash.hex();
+
+      // 2. Send transaction
+      const response = await signAndSubmitTransaction({
+        data: {
+          function: `${MODULE_ADDRESS}::privacy_pool::withdraw`,
+          typeArguments: ["0x1::aptos_coin::AptosCoin"],
+          functionArguments: [secretHash, recipientAddress],
+        },
+      });
+
+      sonnerToast.success("Withdrawal successful!");
+      setSecretNote("");
+      setRecipientAddress("");
+    } catch (error: any) {
+      console.error(error);
+      const errorMessage = error.message.includes("E_SECRET_ALREADY_USED")
+        ? "This secret note has already been used."
+        : "Withdrawal failed. Please check the note and try again.";
+      sonnerToast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(true)
-
-    // Simulate withdrawal transaction
-    await new Promise((resolve) => setTimeout(resolve, 2500))
-
-    setIsLoading(false)
-
-    toast({
-      title: "Withdrawal Successful",
-      description: `Funds sent to ${recipientAddress.substring(0, 10)}...`,
-    })
-
-    // Reset form
-    setSecretNote("")
-    setRecipientAddress("")
-  }
+  };
 
   return (
     <Card className="p-6 bg-card border-border">
