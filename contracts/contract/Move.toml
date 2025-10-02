@@ -1,5 +1,5 @@
 [package]
-name = "VeilMixer"
+name = "Mixer"
 version = "1.0.0"
 
 [dependencies]
@@ -9,4 +9,4 @@ AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir 
 [addresses]
 # This line creates a named address 'veil_addr'. We will set its
 # value in the next step.
-veil_addr = "0x3eadac8d7170d34694f97efc1fad8c62f4b2ea8f23f5ddd1a4e2bc8c9bfc3d50"
+mixer = "0x2267d403073795ada7cb1da76029e92c2b0b693ecfbdc31e1ea65c57584d33bd"
