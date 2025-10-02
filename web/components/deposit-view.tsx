@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { SecretNoteModal } from "@/components/secret-note-modal";
-import { useToast } from "@/hooks/use-toast";
 import { Check } from "lucide-react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { toast as sonnerToast } from "sonner";
@@ -14,9 +14,9 @@ import { sha256 } from "js-sha256";
 import { Buffer } from "buffer";
 
 const POOLS = [
+  { amount: 0.1, label: "0.1 APT", enabled: false },
   { amount: 1, label: "1 APT", enabled: true },
-  { amount: 1, label: "1 APT", enabled: false },
-  { amount: 10, label: "10 APT", enabled: false },
+  { amount: 10, label: "10 APT", enabled: true },
   { amount: 100, label: "100 APT", enabled: false },
 ];
 
@@ -28,7 +28,6 @@ export function DepositView() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSecretModal, setShowSecretModal] = useState(false);
   const [secretNote, setSecretNote] = useState("");
-  const { toast } = useToast();
   const { signAndSubmitTransaction, account } = useWallet();
 
   const handleDeposit = async () => {
@@ -39,8 +38,8 @@ export function DepositView() {
 
     const amount = selectedPool;
 
-    if (amount !== 1) {
-      sonnerToast.error("Please select the 10 APT pool to deposit.");
+    if (amount !== 1 && amount !== 10) {
+      sonnerToast.error("Please select an active pool to deposit.");
       return;
     }
 
@@ -49,15 +48,16 @@ export function DepositView() {
     try {
       // 1. Generate secret and hash
       const secret = Buffer.from(crypto.getRandomValues(new Uint8Array(32)));
-      // 2. Create secret note
-      const note = `veil-10-${Date.now().toString(16)}-${secret.toString("hex")}`;
       const hash = sha256.create();
-      hash.update(note);
+      hash.update(secret);
       const secretHash = hash.hex();
-      setSecretNote(secretHash);
-      //
+
+      // 2. Create secret note
+      const note = `veil-${amount}-${secret.toString("hex")}`;
+      setSecretNote(note);
+
       // 3. Send transaction
-            const response = await signAndSubmitTransaction({
+      const response = await signAndSubmitTransaction({
         data: {
           // CORRECTED: This now calls your contract's deposit function.
           function: `${MODULE_ADDRESS}::privacy_pool::deposit`,
@@ -116,9 +116,12 @@ export function DepositView() {
                   `}
                 >
                   {!pool.enabled && (
-                    <span className="absolute top-1 right-1 text-xs font-bold bg-gray-500 text-white px-2 py-0.5 rounded">
+                    <Badge
+                      variant="secondary"
+                      className="absolute top-2 right-2"
+                    >
                       Soon
-                    </span>
+                    </Badge>
                   )}
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-semibold">{pool.label}</span>
@@ -142,26 +145,30 @@ export function DepositView() {
             <Label htmlFor="custom-amount" className="text-base font-semibold mb-2 block">
               Custom Amount
             </Label>
-            <div className="relative">
-              <Input
-                id="custom-amount"
-                type="number"
-                placeholder="0.00"
-                value={customAmount}
-                disabled
-                className="pr-16 bg-secondary border-border text-lg h-12"
-              />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">APT</span>
+            <div className="flex items-center gap-2">
+              <div className="relative flex-grow">
+                <Input
+                  id="custom-amount"
+                  type="number"
+                  placeholder="0.00"
+                  value={customAmount}
+                  disabled
+                  className="pr-16 bg-secondary border-border text-lg h-12"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">
+                  APT
+                </span>
+              </div>
+              <Badge variant="outline" className="h-fit">
+                Soon
+              </Badge>
             </div>
-            <span className="absolute -bottom-2 right-1 text-xs font-bold bg-gray-500 text-white px-2 py-0.5 rounded">
-              Soon
-            </span>
           </div>
 
           <div className="pt-2">
             <Button
               onClick={handleDeposit}
-              disabled={isLoading || selectedPool !== 1}
+              disabled={isLoading || (selectedPool !== 1 && selectedPool !== 10)}
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
             >
               {isLoading ? "Processing..." : "Deposit to Pool"}
