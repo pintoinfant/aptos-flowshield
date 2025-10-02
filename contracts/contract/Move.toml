@@ -1,0 +1,12 @@
+[package]
+name = "VeilMixer"
+version = "1.0.0"
+
+[dependencies]
+# This line tells the compiler we are using the official Aptos framework
+AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev = "devnet" }
+
+[addresses]
+# This line creates a named address 'veil_addr'. We will set its
+# value in the next step.
+veil_addr = "0x6e8cda31dca1ca7dc92b86c5d308e691980316da808cc9d698abf89d8ff0b084"
