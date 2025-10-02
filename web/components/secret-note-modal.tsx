@@ -32,7 +32,7 @@ export function SecretNoteModal({ isOpen, onClose, secretNote }: SecretNoteModal
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `veil-secret-note-${Date.now()}.txt`
+    a.download = `flowshield-secret-note-${Date.now()}.txt`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)

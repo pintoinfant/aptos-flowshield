@@ -32,7 +32,7 @@ export function WithdrawView() {
     }
 
     const noteParts = secretNote.trim().split("-");
-    if (noteParts.length !== 3 || noteParts[0] !== "veil") {
+    if (noteParts.length !== 3 || noteParts[0] !== "flowshield") {
       sonnerToast.error("Invalid secret note format.");
       return;
     }
@@ -91,7 +91,7 @@ export function WithdrawView() {
           </Label>
           <Textarea
             id="secret-note"
-            placeholder="veil-xxxxxxxxxxxxxxxxxxxxx"
+            placeholder="flowshield-xxxxxxxxxxxxxxxxxxxxx"
             value={secretNote}
             onChange={(e) => setSecretNote(e.target.value)}
             className="bg-secondary border-border font-mono text-sm min-h-24 resize-none"

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Wallet } from "lucide-react";
+import { Wallet, Shield } from "lucide-react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { shortenAddress } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -39,9 +39,9 @@ export function Header() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-lg">V</span>
+            <Shield className="w-5 h-5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold">Veil Mixer</span>
+          <span className="text-xl font-bold">FlowShield</span>
         </div>
 
         {connected && account ? (

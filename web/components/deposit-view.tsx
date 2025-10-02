@@ -53,7 +53,7 @@ export function DepositView() {
       const secretHash = hash.hex();
 
       // 2. Create secret note
-      const note = `veil-${amount}-${secret.toString("hex")}`;
+      const note = `flowshield-${amount}-${secret.toString("hex")}`;
       setSecretNote(note);
 
       // 3. Send transaction
