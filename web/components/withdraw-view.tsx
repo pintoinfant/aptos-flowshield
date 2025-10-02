@@ -12,7 +12,7 @@ import { toast as sonnerToast } from "sonner";
 import { sha256 } from "js-sha256";
 import { Buffer } from "buffer";
 
-const MODULE_ADDRESS = "0x3eadac8d7170d34694f97efc1fad8c62f4b2ea8f23f5ddd1a4e2bc8c9bfc3d50";
+const MODULE_ADDRESS = "0x2267d403073795ada7cb1da76029e92c2b0b693ecfbdc31e1ea65c57584d33bd";
 
 export function WithdrawView() {
   const [secretNote, setSecretNote] = useState("");
@@ -31,22 +31,19 @@ export function WithdrawView() {
       return;
     }
 
-    if (!recipientAddress.trim() || !recipientAddress.startsWith("0x")) {
-      sonnerToast.error("Please enter a valid recipient address.");
+    const noteParts = secretNote.trim().split("-");
+    if (noteParts.length !== 3 || noteParts[0] !== "veil") {
+      sonnerToast.error("Invalid secret note format.");
       return;
     }
-
-    // const noteParts = secretNote.split("-");
-    // if (noteParts.length !== 3 || noteParts[0] !== "veil" || noteParts[1] !== "10") {
-    //   sonnerToast.error("Invalid secret note format.");
-    //   return;
-    // }
 
     setIsLoading(true);
 
     try {
-      // 1. Extract secret and calculate hash
-      const secret = Buffer.from(secretNote, "hex");
+      const amount = parseFloat(noteParts[1]);
+      const secret = Buffer.from(noteParts[2], "hex");
+
+      // 1. Calculate secret hash
       const hash = sha256.create();
       hash.update(secret);
       const secretHash = hash.hex();
@@ -54,9 +51,9 @@ export function WithdrawView() {
       // 2. Send transaction
       const response = await signAndSubmitTransaction({
         data: {
-          function: `${MODULE_ADDRESS}::privacy_pool::withdraw`,
+          function: `${MODULE_ADDRESS}::privacy_pool::withdraw_direct`,
           typeArguments: ["0x1::aptos_coin::AptosCoin"],
-          functionArguments: [secretHash, recipientAddress],
+          functionArguments: [secretHash, amount * 10 ** 8],
         },
       });
 
@@ -110,17 +107,18 @@ export function WithdrawView() {
             id="recipient"
             type="text"
             placeholder="0x..."
-            value={recipientAddress}
-            onChange={(e) => setRecipientAddress(e.target.value)}
+            value={account?.address.toString() || ""}
+            readOnly
+            disabled
             className="bg-secondary border-border font-mono h-12"
           />
-          <p className="text-xs text-muted-foreground mt-2">The address where you want to receive the funds</p>
+          <p className="text-xs text-muted-foreground mt-2">Funds will be withdrawn to the connected wallet address.</p>
         </div>
 
         <div className="pt-2">
           <Button
             onClick={handleWithdraw}
-            disabled={isLoading || !secretNote || !recipientAddress}
+            disabled={isLoading || !secretNote}
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
           >
             {isLoading ? "Processing Withdrawal..." : "Withdraw Funds"}

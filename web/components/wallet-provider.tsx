@@ -11,7 +11,7 @@ const wallets = [new PetraWallet()];
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const dappConfig: DappConfig = {
-    network: Network.TESTNET,
+    network: Network.DEVNET,
   };
 
   return (

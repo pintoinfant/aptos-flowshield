@@ -14,16 +14,16 @@ import { sha256 } from "js-sha256";
 import { Buffer } from "buffer";
 
 const POOLS = [
-  { amount: 0.1, label: "0.1 APT", enabled: false },
+  { amount: 0.1, label: "0.1 APT", enabled: true },
   { amount: 1, label: "1 APT", enabled: true },
   { amount: 10, label: "10 APT", enabled: true },
-  { amount: 100, label: "100 APT", enabled: false },
+  { amount: 100, label: "100 APT", enabled: true },
 ];
 
-const MODULE_ADDRESS = "0x3eadac8d7170d34694f97efc1fad8c62f4b2ea8f23f5ddd1a4e2bc8c9bfc3d50";
+const MODULE_ADDRESS = "0x2267d403073795ada7cb1da76029e92c2b0b693ecfbdc31e1ea65c57584d33bd";
 
 export function DepositView() {
-  const [selectedPool, setSelectedPool] = useState<number | null>(1);
+  const [selectedPool, setSelectedPool] = useState<number | null>(0.1);
   const [customAmount, setCustomAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showSecretModal, setShowSecretModal] = useState(false);
@@ -38,8 +38,8 @@ export function DepositView() {
 
     const amount = selectedPool;
 
-    if (amount !== 1 && amount !== 10) {
-      sonnerToast.error("Please select an active pool to deposit.");
+    if (!amount) {
+      sonnerToast.error("Please select a pool to deposit.");
       return;
     }
 
@@ -168,7 +168,7 @@ export function DepositView() {
           <div className="pt-2">
             <Button
               onClick={handleDeposit}
-              disabled={isLoading || (selectedPool !== 1 && selectedPool !== 10)}
+              disabled={isLoading || !selectedPool}
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base font-semibold"
             >
               {isLoading ? "Processing..." : "Deposit to Pool"}
