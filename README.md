@@ -437,12 +437,10 @@ npm run test:e2e  # End-to-end testing with Playwright
 ### Core Development Team
 
 #### **Lead Developer** 
-**Name**: [Your Name]  
-**Role**: Full-Stack Developer & Smart Contract Engineer  
-**Background**: 5+ years in blockchain development, Move language expert  
-**Contact**: developer@flowshield.xyz  
+**Name**: Pinto Infant
+**Role**: Full-Stack Developer
 **GitHub**: [@pintoinfant](https://github.com/pintoinfant)  
-**LinkedIn**: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+**X**: [@pintoinfant](https://x.com/pintoinfant)
 
 #### **Smart Contract Development**
 - Move language expertise with Aptos framework
@@ -459,32 +457,10 @@ npm run test:e2e  # End-to-end testing with Playwright
 - Real-time blockchain data integration
 - Environment configuration and deployment
 
-### Development Timeline
-
-**Week 1-2**: Research & Architecture Design
-- Privacy mixer algorithm research
-- Move language learning and setup
-- UI/UX design and component planning
-
-**Week 3-4**: Smart Contract Development
-- Core privacy mixer contract implementation
-- Comprehensive testing and security review
-- Deployment scripts and configuration
-
-**Week 5-6**: Frontend Development
-- Landing page and application interface
-- Wallet integration and transaction handling
-- Real-time statistics and user feedback
-
-**Week 7**: Integration & Polish
-- End-to-end testing and bug fixes
-- Documentation and demo preparation
-- Performance optimization
-
 ### Technical Achievements
 
 🏆 **Innovation Highlights**:
-- First privacy mixer implemented in Move language
+- Privacy mixer implemented in Move language
 - Gas-free withdrawal system with relayer architecture
 - Real-time analytics dashboard for transparency
 - Professional-grade UI/UX for DeFi applications
@@ -630,11 +606,6 @@ FlowShield is designed for privacy and does not collect personal information:
 - For creating the secure and efficient Aptos blockchain
 - Excellent developer documentation and tooling
 - Active community support and hackathon programs
-
-**Move Language Team**
-- Revolutionary approach to smart contract security
-- Formal verification and memory safety features
-- Comprehensive standard library and frameworks
 
 **Open Source Community**
 - **shadcn/ui**: Beautiful and accessible component library
