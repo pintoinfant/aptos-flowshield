@@ -12,7 +12,7 @@
 ## 🏆 Hackathon Submission
 
 **Event**: Aptos CTRL+MOVE 2025  
-**Live Demo**: [aptos-flowshield.vercel.app](aptos-flowshield.vercel.app)  
+**Live Demo**: [https://aptos-flowshield.vercel.app](https://aptos-flowshield.vercel.app)  
 **Video Demo**: [https://drive.google.com/drive/folders/1X9xksLng0RVy1y9Ym3DTdKAGcKdgF8-j?usp=drive_link](https://drive.google.com/drive/folders/1X9xksLng0RVy1y9Ym3DTdKAGcKdgF8-j?usp=drive_link)
 
 ---
