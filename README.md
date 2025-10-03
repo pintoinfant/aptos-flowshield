@@ -366,13 +366,13 @@ npm run test:e2e  # End-to-end testing with Playwright
 ```
 
 ### Manual Testing Checklist
-- [ ] Wallet connection and disconnection
+- [x] Wallet connection and disconnection
 - [ ] Deposit flow with all pool denominations
-- [ ] Secret note generation and storage
-- [ ] Direct withdrawal functionality
-- [ ] Relayer withdrawal with fee calculation
-- [ ] Stats section real-time updates
-- [ ] Responsive design on mobile devices
+- [x] Secret note generation and storage
+- [x] Direct withdrawal functionality
+- [x] Relayer withdrawal with fee calculation
+- [x] Stats section real-time updates
+- [x] Responsive design on mobile devices
 - [ ] Error handling for invalid inputs
 
 ---
