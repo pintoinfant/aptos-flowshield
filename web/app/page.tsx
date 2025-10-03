@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Shield, Box, Shuffle, Check, KeyRound, LogIn, LogOut } from "lucide-react"
 import Link from "next/link"
+import { StatsSection } from "@/components/stats-section"
 
 export default function LandingPage() {
   return (
@@ -138,6 +139,9 @@ export default function LandingPage() {
           </Card>
         </div>
       </section>
+
+      {/* Stats Section */}
+      <StatsSection />
 
       {/* FAQ Section */}
       <section className="container mx-auto px-4 py-16">
