@@ -48,12 +48,25 @@ export function Header() {
   return (
     <header className="border-b border-border bg-card">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Shield className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="text-xl font-bold">FlowShield</span>
-        </Link>
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <Shield className="w-5 h-5 text-primary-foreground" />
+            </div>
+            <span className="text-xl font-bold">FlowShield</span>
+          </Link>
+          
+          {connected && (
+            <nav className="hidden md:flex items-center gap-6">
+              <Link href="/shield" className="text-sm font-medium hover:text-primary transition-colors">
+                Shield
+              </Link>
+              <Link href="/analytics" className="text-sm font-medium hover:text-primary transition-colors">
+                Analytics
+              </Link>
+            </nav>
+          )}
+        </div>
 
         {connected && account ? (
           <div className="flex items-center gap-3">
