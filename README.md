@@ -11,11 +11,9 @@
 
 ## 🏆 Hackathon Submission
 
-**Event**: Aptos Hackathon 2025  
-**Category**: DeFi & Privacy  
-**Submission Date**: January 2025  
-**Live Demo**: [https://flowshield.app](https://flowshield.app)  
-**Video Demo**: [YouTube Link]
+**Event**: Aptos CTRL+MOVE 2025  
+**Live Demo**: [https://github.com/pintoinfant/aptos-flowshield](https://github.com/pintoinfant/aptos-flowshield)  
+**Video Demo**: [https://drive.google.com/drive/folders/1X9xksLng0RVy1y9Ym3DTdKAGcKdgF8-j?usp=drive_link](https://drive.google.com/drive/folders/1X9xksLng0RVy1y9Ym3DTdKAGcKdgF8-j?usp=drive_link)
 
 ---
 
@@ -115,8 +113,8 @@ Aptos CLI (https://aptos.dev/cli-tools/aptos-cli-tool/install-aptos-cli)
 
 ```bash
 # Clone the repository
-git clone https://github.com/pintoinfant/flowshield.git
-cd flowshield
+git clone https://github.com/pintoinfant/aptos-flowshield.git
+cd aptos-flowshield
 
 # Install web dependencies
 cd web
@@ -306,7 +304,7 @@ Check blockchain explorer - no connection between your deposit and withdrawal ad
 ## 🎯 Project Structure
 
 ```
-flowshield/
+aptos-flowshield/
 ├── 📁 contracts/                 # Move smart contracts
 │   ├── 📁 contract/
 │   │   ├── 📁 sources/
@@ -501,13 +499,6 @@ npm run test:e2e  # End-to-end testing with Playwright
 
 ## 🤝 Community & Contributions
 
-### Connect with FlowShield
-
-- 🌐 **Website**: [https://flowshield.app](https://flowshield.app)
-- 🐦 **Twitter**: [@FlowShieldApp](https://twitter.com/flowshieldapp) 
-- 💬 **Discord**: [FlowShield Community](https://discord.gg/flowshield)
-- 📧 **Email**: team@flowshield.xyz
-- 📱 **Telegram**: [t.me/flowshield](https://t.me/flowshield)
 
 ### Contributing to FlowShield
 
@@ -516,7 +507,7 @@ We welcome contributions from the community! Here's how you can help:
 #### **For Developers**
 ```bash
 # Fork the repository
-git clone https://github.com/yourusername/flowshield.git
+git clone https://github.com/pintoinfant/aptos-flowshield.git
 
 # Create a feature branch
 git checkout -b feature/amazing-improvement
@@ -539,9 +530,8 @@ git push origin feature/amazing-improvement
 
 Found a bug or have a feature idea? We'd love to hear from you!
 
-- 🐛 **Report Bugs**: [GitHub Issues](https://github.com/pintoinfant/flowshield/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/pintoinfant/flowshield/discussions)
-- 🔒 **Security Issues**: security@flowshield.xyz (private disclosure)
+- 🐛 **Report Bugs**: [GitHub Issues](https://github.com/pintoinfant/aptos-flowshield/issues)
+- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/pintoinfant/aptos-flowshield/discussions)
 
 ---
 
