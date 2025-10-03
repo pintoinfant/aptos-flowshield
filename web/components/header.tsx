@@ -7,6 +7,8 @@ import { shortenAddress } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const aptosConfig = new AptosConfig({ network: Network.DEVNET });
 const aptos = new Aptos(aptosConfig);
@@ -23,8 +25,17 @@ export function Header() {
     }
   }, [connected, account]);
 
+  const router = useRouter();
+
   const handleConnect = (walletName: string) => {
     connect(walletName);
+  };
+
+  const handleDisconnect = () => {
+    disconnect();
+    toast.success("Wallet disconnected");
+    // Navigate to landing page after disconnect
+    router.push("/");
   };
 
   const handleCopyAddress = () => {
@@ -37,12 +48,12 @@ export function Header() {
   return (
     <header className="border-b border-border bg-card">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Shield className="w-5 h-5 text-primary-foreground" />
           </div>
           <span className="text-xl font-bold">FlowShield</span>
-        </div>
+        </Link>
 
         {connected && account ? (
           <div className="flex items-center gap-3">
@@ -55,7 +66,7 @@ export function Header() {
                 {shortenAddress(account.address.toString())}
               </span>
             </div>
-            <Button variant="outline" size="sm" onClick={disconnect}>
+            <Button variant="outline" size="sm" onClick={handleDisconnect}>
               Disconnect
             </Button>
           </div>
