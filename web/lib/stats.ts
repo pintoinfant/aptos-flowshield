@@ -1,9 +1,8 @@
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
+import { config } from "./config";
 
-const aptosConfig = new AptosConfig({ network: Network.DEVNET });
+const aptosConfig = new AptosConfig({ network: Network[config.aptosNetwork.toUpperCase() as keyof typeof Network] });
 const aptos = new Aptos(aptosConfig);
-
-const MODULE_ADDRESS = "0x2267d403073795ada7cb1da76029e92c2b0b693ecfbdc31e1ea65c57584d33bd";
 
 export interface PoolStats {
   denomination: number;
@@ -36,19 +35,19 @@ export async function fetchFlowShieldStats(): Promise<FlowShieldStats> {
   const poolStats: PoolStats[] = [];
 
   try {
-    console.log("Fetching FlowShield stats from:", MODULE_ADDRESS);
+    console.log("Fetching FlowShield stats from:", config.moduleAddress);
 
     // Check if the contract exists and is initialized
     const mixerResource = await aptos.getAccountResource({
-      accountAddress: MODULE_ADDRESS,
-      resourceType: `${MODULE_ADDRESS}::privacy_pool::Mixer<0x1::aptos_coin::AptosCoin>`
+      accountAddress: config.moduleAddress,
+      resourceType: `${config.moduleAddress}::privacy_pool::Mixer<0x1::aptos_coin::AptosCoin>`
     });
 
     console.log("Mixer resource found:", mixerResource);
 
     // Get account transactions to count actual activity
     const transactions = await aptos.getAccountTransactions({
-      accountAddress: MODULE_ADDRESS,
+      accountAddress: config.moduleAddress,
       options: {
         limit: 100  // Get last 100 transactions to analyze
       }
@@ -77,7 +76,7 @@ export async function fetchFlowShieldStats(): Promise<FlowShieldStats> {
 
     // Try to get account balance to estimate TVL
     const accountBalance = await aptos.getAccountAPTAmount({
-      accountAddress: MODULE_ADDRESS
+      accountAddress: config.moduleAddress
     });
     
     totalValueLocked = accountBalance / 100000000; // Convert from octas to APT

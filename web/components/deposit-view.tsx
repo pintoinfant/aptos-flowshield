@@ -12,6 +12,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { toast as sonnerToast } from "sonner";
 import { sha256 } from "js-sha256";
 import { Buffer } from "buffer";
+import { config } from "@/lib/config";
 
 const POOLS = [
   { amount: 0.1, label: "0.1 APT", enabled: true },
@@ -19,8 +20,6 @@ const POOLS = [
   { amount: 10, label: "10 APT", enabled: true },
   { amount: 100, label: "100 APT", enabled: true },
 ];
-
-const MODULE_ADDRESS = "0x2267d403073795ada7cb1da76029e92c2b0b693ecfbdc31e1ea65c57584d33bd";
 
 export function DepositView() {
   const [selectedPool, setSelectedPool] = useState<number | null>(0.1);
@@ -60,7 +59,7 @@ export function DepositView() {
       const response = await signAndSubmitTransaction({
         data: {
           // CORRECTED: This now calls your contract's deposit function.
-          function: `${MODULE_ADDRESS}::privacy_pool::deposit`,
+          function: `${config.moduleAddress}::privacy_pool::deposit`,
           
           // Your function requires a CoinType generic.
           typeArguments: ['0x1::aptos_coin::AptosCoin'],

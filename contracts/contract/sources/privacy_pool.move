@@ -112,4 +112,53 @@ module mixer::privacy_pool {
             amount: amount,
         });
     }
+
+    /// --- Relayer Support ---
+    /// Allows the operator (relayer) to submit withdrawal on behalf of a user,
+    /// 95% goes to the user and 5% fee goes to the operator (relayer).
+    public entry fun withdraw_via_relayer<CoinType>(
+        _relayer: &signer,
+        secret_hash: vector<u8>,
+        amount: u64,
+        recipient_address: address
+    ) acquires Mixer {
+        let mixer = borrow_global_mut<Mixer<CoinType>>(@mixer);
+
+        // Ensure pool exists
+        assert!(table::contains(&mixer.pools, amount), E_POOL_NOT_FOUND);
+        // Ensure secret has not been used
+        assert!(!table::contains(&mixer.used_secrets, secret_hash), E_SECRET_ALREADY_USED);
+
+        let pool = table::borrow_mut(&mut mixer.pools, amount);
+        // Ensure commitment exists in deposits
+        assert!(table::contains(&pool.deposits, secret_hash), E_DEPOSIT_NOT_FOUND);
+
+        // Mark secret as used and remove from pool
+        table::add(&mut mixer.used_secrets, secret_hash, true);
+        let _ = table::remove(&mut pool.deposits, secret_hash);
+
+        // Extract coins from pool
+        let withdrawn_coins = coin::extract(&mut pool.balance, amount);
+
+        // Calculate 5% fee
+        let fee_amount = amount / 20; // 5%
+        let user_amount = amount - fee_amount;
+
+        // Split coins into user + relayer
+        let fee_coins = coin::extract(&mut withdrawn_coins, fee_amount);
+        let user_coins = withdrawn_coins;
+
+        let relayer_address = mixer.operator_address;
+
+        // Deposit to recipient and relayer
+        coin::deposit(recipient_address, user_coins);
+        coin::deposit(relayer_address, fee_coins);
+
+        // Emit withdraw event for transparency (logs user amount)
+        event::emit_event(&mut mixer.withdraw_events, WithdrawEvent {
+            recipient: recipient_address,
+            amount: user_amount,
+        });
+    }
+
 }
